@@ -193,20 +193,8 @@ function App() {
   const handleKeyDown = (event) => {
     const key = event.key.toLowerCase();
 
-    if (event.ctrlKey && event.shiftKey && key === 'x') {
+    if (event.ctrlKey && key === 'x') {
       sequence = ['x'];
-      return;
-    }
-
-    if (sequence.length === 1 && key === 't') {
-      sequence.push('t');
-      return;
-    }
-
-    if (sequence.length === 2 && key === 'j') {
-      setDateUnlockingOverride(false);
-      sequence = [];
-      console.log('Date unlocking temporarily disabled.');
       return;
     }
 
@@ -218,7 +206,7 @@ function App() {
   return () => {
     window.removeEventListener('keydown', handleKeyDown);
   };
-}, []);
+}, []); 
 
   useEffect(() => {
     if (!notice) return undefined;
