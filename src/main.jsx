@@ -186,11 +186,25 @@ function App() {
   const unlockedCount = getUnlockedCount(dateUnlockingOverride);
 
   useEffect(() => {
+  const wasDeveloperUnlocked = sessionStorage.getItem('developerUnlock');
+
+  if (wasDeveloperUnlocked === 'true') {
+    setOpenedDays(new Set());
+    persistOpenedDays(new Set());
+    sessionStorage.removeItem('developerUnlock');
+  }
+}, []);
+
+  useEffect(() => {
   const handleKeyDown = (event) => {
     if (event.ctrlKey && event.key.toLowerCase() === 'x') {
       event.preventDefault();
+
       setDateUnlockingOverride(false);
-      console.log('Date unlocking disabled.');
+
+      sessionStorage.setItem('developerUnlock', 'true');
+
+      console.log('Developer unlock enabled.');
     }
   };
 
