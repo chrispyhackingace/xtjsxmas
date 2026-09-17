@@ -8,8 +8,6 @@ const USE_DATE_UNLOCKING = true;
 // Set an ISO date while testing date unlocking. Leave null to use the visitor's current date.
 const DEVELOPMENT_DATE_OVERRIDE = null;
 
-let dateUnlockingOverride = null;
-
 function getUnlockedCount(dateUnlockingOverride = null) {
   const useDateUnlocking =
     dateUnlockingOverride ?? USE_DATE_UNLOCKING;
@@ -188,17 +186,12 @@ function App() {
   const unlockedCount = getUnlockedCount(dateUnlockingOverride);
 
   useEffect(() => {
-  let sequence = [];
-
   const handleKeyDown = (event) => {
-    const key = event.key.toLowerCase();
-
-    if (event.ctrlKey && key === 'x') {
-      sequence = ['x'];
-      return;
+    if (event.ctrlKey && event.key.toLowerCase() === 'x') {
+      event.preventDefault();
+      setDateUnlockingOverride(false);
+      console.log('Date unlocking disabled.');
     }
-
-    sequence = [];
   };
 
   window.addEventListener('keydown', handleKeyDown);
