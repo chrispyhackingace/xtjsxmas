@@ -69,15 +69,18 @@ h1 em { font-weight: 500; color: #d97558; font-style: normal; }
 .music-message { font-size: 11px; line-height: 1.6; color: #73553d; }
 .opened-card { max-height: calc(100svh - 48px); overflow-y: auto; }
 .note-paper { display: flex; flex-direction: column; justify-content: center; gap: 8px; width: 100%; aspect-ratio: 1; padding: 12px; color: inherit; overflow: hidden; }
-.note-title { font: 600 clamp(12px, 1.6vw, 18px)/1.2 'Fraunces', serif; overflow-wrap: anywhere; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
-.note-description { margin: 0; font-size: 16px; line-height: 1.7; white-space: pre-wrap; overflow-wrap: anywhere; }
-.note-paper .note-description { font-size: clamp(11px, 1.2vw, 13px); line-height: 1.4; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
+.note-title { font: 600 clamp(8.4px, 1.12vw, 12.6px)/1.2 'Fraunces', serif; overflow-wrap: anywhere; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.note-description { margin: 0; font-size: 11.2px; line-height: 1.7; white-space: pre-wrap; overflow-wrap: anywhere; }
+.note-paper .note-description { font-size: clamp(7.7px, .84vw, 9.1px); line-height: 1.4; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
 .opened-note:focus-visible .note-paper { outline: 3px solid #f6da83; outline-offset: 3px; }
 .note-frame { display: block; }
 .note-frame .note-paper { box-shadow: none; }
 .opened-note .note-frame { display: flex; align-items: center; }
 .note-content { width: 100%; aspect-ratio: 1; padding: 20px 12px; color: inherit; display: flex; flex-direction: column; justify-content: center; }
-.note-card h2 { color: inherit; overflow-wrap: anywhere; }
+.note-card h2 { color: inherit; font-size: 20.3px; overflow-wrap: anywhere; }
+.note-card .opened-kicker { font-size: 6.3px; }
+.note-card .card-signoff { font-size: 9.8px; }
+.opened-note .door-number { font-size: 13.3px; }
 .note-red { --note-background: #b94c3e; --note-ink: #fff; }
 .note-green { --note-background: #35664a; --note-ink: #fff; }
 .note-cream { --note-background: #efe2b9; --note-ink: #000; }
@@ -85,7 +88,7 @@ h1 em { font-weight: 500; color: #d97558; font-style: normal; }
 .note-card, .note-frame { background: var(--note-background); }
 .note-card .opened-kicker, .note-card .tiny-sprig, .note-card .close-button, .note-card .card-signoff, .note-card .card-signoff span { color: inherit; }
 .opened-description { font-size: 15px; line-height: 1.7; }
-.note-card[data-day="24"] { width: min(100%, 640px); --message-title-size: clamp(22.5px, 4vw, 29px); }
+.note-card[data-day="24"] { width: min(100%, 640px); --message-title-size: clamp(15.75px, 2.8vw, 20.3px); }
 .note-card[data-day="24"] .note-frame { width: 100%; transform: none; }
 .note-card[data-day="24"] .note-content { aspect-ratio: auto; padding: 16px 8px; }
 .note-card[data-day="24"] h2 { font-size: var(--message-title-size); max-width: none; margin-bottom: 18px; }
@@ -98,6 +101,7 @@ h1 em { font-weight: 500; color: #d97558; font-style: normal; }
 }
 
 @media (max-width: 650px) {
+	.opened-note .door-number { font-size: 10.5px; }
 	.page-shell { padding-top: 44px; }
 	.top-lights::before { inset: 7px; }
 }
