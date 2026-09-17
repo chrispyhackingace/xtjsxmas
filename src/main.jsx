@@ -188,45 +188,37 @@ function App() {
   const unlockedCount = getUnlockedCount(dateUnlockingOverride);
 
   useEffect(() => {
-    let sequence = [];
+  let sequence = [];
 
-    const handleKeyDown = (event) => {
-      const key = event.key.toLowerCase();
+  const handleKeyDown = (event) => {
+    const key = event.key.toLowerCase();
 
-      if (event.ctrlKey && key === 'x') {
-        sequence = ['ctrl+x'];
-        return;
-      }
+    if (event.ctrlKey && event.shiftKey && key === 'x') {
+      sequence = ['x'];
+      return;
+    }
 
-      if (
-        sequence.length === 1 &&
-        sequence[0] === 'ctrl+x' &&
-        key === 't'
-      ) {
-        sequence.push('t');
-        return;
-      }
+    if (sequence.length === 1 && key === 't') {
+      sequence.push('t');
+      return;
+    }
 
-      if (
-        sequence.length === 2 &&
-        sequence[1] === 't' &&
-        key === 'j'
-      ) {
-        setDateUnlockingOverride(false);
-        sequence = [];
-        console.log('Date unlocking temporarily disabled.');
-        return;
-      }
-
+    if (sequence.length === 2 && key === 'j') {
+      setDateUnlockingOverride(false);
       sequence = [];
-    };
+      console.log('Date unlocking temporarily disabled.');
+      return;
+    }
 
-    window.addEventListener('keydown', handleKeyDown);
+    sequence = [];
+  };
 
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, []);
+  window.addEventListener('keydown', handleKeyDown);
+
+  return () => {
+    window.removeEventListener('keydown', handleKeyDown);
+  };
+}, []);
 
   useEffect(() => {
     if (!notice) return undefined;
