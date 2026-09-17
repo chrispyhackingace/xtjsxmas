@@ -4,15 +4,29 @@ import { LockKeyhole, X } from 'lucide-react';
 import { contentItems, getPersistentAssignment, getPersistentDoorLayout, getPersistentOpenedDays, persistOpenedDays } from './content';
 import './styles.css';
 
-// False skips date restrictions; doors must still be opened in order. True also enforces dates.
 const USE_DATE_UNLOCKING = true;
 // Set an ISO date while testing date unlocking. Leave null to use the visitor's current date.
 const DEVELOPMENT_DATE_OVERRIDE = null;
 
-function getUnlockedCount() {
-  if (!USE_DATE_UNLOCKING) return 24;
-  const date = new Date(DEVELOPMENT_DATE_OVERRIDE || new Date());
-  if (date.getFullYear() !== 2026 || date.getMonth() !== 11) return date > new Date('2026-12-24') ? 24 : 0;
+let dateUnlockingOverride = null;
+
+function getUnlockedCount(dateUnlockingOverride = null) {
+  const useDateUnlocking =
+    dateUnlockingOverride ?? USE_DATE_UNLOCKING;
+
+  if (!useDateUnlocking) return 24;
+
+  const date = new Date(
+    DEVELOPMENT_DATE_OVERRIDE || new Date()
+  );
+
+  if (
+    date.getFullYear() !== 2026 ||
+    date.getMonth() !== 11
+  ) {
+    return date > new Date('2026-12-24') ? 24 : 0;
+  }
+
   return Math.min(24, Math.max(0, date.getDate()));
 }
 
@@ -170,7 +184,49 @@ function App() {
   const [currentTime, setCurrentTime] = useState(() => new Date());
   const [activeDay, setActiveDay] = useState(null);
   const [notice, setNotice] = useState(false);
-  const unlockedCount = getUnlockedCount();
+  const [dateUnlockingOverride, setDateUnlockingOverride] = useState(null);
+  const unlockedCount = getUnlockedCount(dateUnlockingOverride);
+
+  useEffect(() => {
+    let sequence = [];
+
+    const handleKeyDown = (event) => {
+      const key = event.key.toLowerCase();
+
+      if (event.ctrlKey && key === 'x') {
+        sequence = ['ctrl+x'];
+        return;
+      }
+
+      if (
+        sequence.length === 1 &&
+        sequence[0] === 'ctrl+x' &&
+        key === 't'
+      ) {
+        sequence.push('t');
+        return;
+      }
+
+      if (
+        sequence.length === 2 &&
+        sequence[1] === 't' &&
+        key === 'j'
+      ) {
+        setDateUnlockingOverride(false);
+        sequence = [];
+        console.log('Date unlocking temporarily disabled.');
+        return;
+      }
+
+      sequence = [];
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
 
   useEffect(() => {
     if (!notice) return undefined;
