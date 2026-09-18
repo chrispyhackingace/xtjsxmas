@@ -18,7 +18,7 @@ export const contentItems = [
   { id: 11, type: 'photo', title: '我的头发不见了', image: img('p5.jpg'), placeholderImage: img('placeholder-11.svg'), description: '怎么办呀?' },
   { id: 12, type: 'note', title: '小笑话', image: img('placeholder-12.svg'), placeholderImage: img('placeholder-12.svg'), description: '别半途而废哦~' },
   { id: 13, type: 'photo', title: '我偷拍的不错诶', image: img('p6.jpg'), placeholderImage: img('placeholder-13.svg'), description: '这次不收你钱哦，我的心是不是很好啊' },
-  { id: 14, type: 'note', title: '认识你真的很幸运，希望以后还能一起做很多奇奇怪怪的事情', image: img('placeholder-14.svg'), placeholderImage: img('placeholder-14.svg'), description: 'MWAHAHAHAHA' },
+  { id: 14, type: 'note', title: '恭喜你发现了这个门; 奖励：没有', image: img('placeholder-14.svg'), placeholderImage: img('placeholder-14.svg'), description: 'MWAHAHAHAHA' },
   { id: 15, type: 'note', title: '2026年度最会活着奖', image: img('placeholder-15.svg'), placeholderImage: img('placeholder-15.svg'), description: '获奖人: 你; 获奖理由: 活到了现在' },
   { id: 16, type: 'note', title: '都第16天了，你居然还没有发现这个圣诞日历到底有什么意义', image: img('placeholder-16.svg'), placeholderImage: img('placeholder-16.svg'), description: '其实我也不知道' },
   { id: 17, type: 'photo', title: '脑袋好用', image: img('p7.jpg'), placeholderImage: img('placeholder-17.svg'), description: '手也好事' },

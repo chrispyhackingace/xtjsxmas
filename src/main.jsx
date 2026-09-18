@@ -102,6 +102,82 @@ function AdventDoor({ day, color, ornament, available, numberVisible, onOpen }) 
   </button>;
 }
 
+function BackgroundMusic() {
+  const audioRef = useRef(null);
+
+  useEffect(() => {
+    const background = audioRef.current;
+    const progressKey = 'xtjsxmas-background-michael-position';
+    let positionRestored = false;
+    const savePosition = () => {
+      if (!positionRestored || !Number.isFinite(background.currentTime)) return;
+      try {
+        localStorage.setItem(progressKey, String(background.currentTime));
+      } catch {
+        // Music can still play when browser storage is unavailable.
+      }
+    };
+    const restorePosition = () => {
+      if (positionRestored) return;
+      try {
+        const savedPosition = Number(localStorage.getItem(progressKey));
+        if (Number.isFinite(savedPosition) && savedPosition >= 0 && background.duration > 0) {
+          background.currentTime = savedPosition % background.duration;
+        }
+      } catch {
+        // Start at the beginning if the saved position cannot be restored.
+      }
+      positionRestored = true;
+    };
+    background.addEventListener('loadedmetadata', restorePosition);
+    if (background.readyState >= 1) restorePosition();
+    background.addEventListener('pause', savePosition);
+    window.addEventListener('pagehide', savePosition);
+    document.addEventListener('visibilitychange', savePosition);
+    const saveInterval = window.setInterval(savePosition, 1000);
+
+    const syncPlayback = () => {
+      const otherAudioPlaying = Array.from(document.querySelectorAll('audio, video'))
+        .some((media) => media !== background && !media.paused && !media.ended && !media.error);
+
+      if (otherAudioPlaying) {
+        background.pause();
+      } else if (background.paused) {
+        // Browsers may require an interaction before allowing background music.
+        background.play().catch(() => {});
+      }
+    };
+    const handleMediaEvent = (event) => {
+      if (event.target !== background) syncPlayback();
+    };
+    const mediaEvents = ['play', 'playing', 'pause', 'ended', 'error', 'emptied'];
+    mediaEvents.forEach((name) => document.addEventListener(name, handleMediaEvent, true));
+    document.addEventListener('click', syncPlayback);
+    document.addEventListener('keydown', syncPlayback);
+
+    // Closing a zoomed box removes its player from the page.
+    const observer = new MutationObserver(syncPlayback);
+    observer.observe(document.body, { childList: true, subtree: true });
+    syncPlayback();
+
+    return () => {
+      savePosition();
+      window.clearInterval(saveInterval);
+      background.removeEventListener('loadedmetadata', restorePosition);
+      background.removeEventListener('pause', savePosition);
+      window.removeEventListener('pagehide', savePosition);
+      document.removeEventListener('visibilitychange', savePosition);
+      observer.disconnect();
+      mediaEvents.forEach((name) => document.removeEventListener(name, handleMediaEvent, true));
+      document.removeEventListener('click', syncPlayback);
+      document.removeEventListener('keydown', syncPlayback);
+      background.pause();
+    };
+  }, []);
+
+  return <audio ref={audioRef} src={`${import.meta.env.BASE_URL}audio/michael.mp3`} loop preload="auto" />;
+}
+
 function MusicPlayer({ item }) {
   const audioRef = useRef(null);
   const [message, setMessage] = useState('');
@@ -241,6 +317,7 @@ function App() {
   };
 
   return <main className="page-shell">
+    <BackgroundMusic />
     <Snowfall />
     <div className="top-lights" aria-hidden="true">{Array.from({ length: 80 }, (_, index) => {
       const isTop = index < 40;
